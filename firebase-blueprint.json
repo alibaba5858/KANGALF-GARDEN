@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile and game progress",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "coins": { "type": "number", "description": "Current currency" },
+        "highScore": { "type": "number", "description": "Highest score achieved" },
+        "xp": { "type": "number", "description": "Experience points" },
+        "level": { "type": "number", "description": "Player level" },
+        "lastSaved": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "coins", "xp", "level"]
+    },
+    "Garden": {
+      "title": "Garden",
+      "description": "The state of the user's garden",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "plots": { 
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "number" },
+              "cropType": { "type": "string" },
+              "plantedAt": { "type": "number", "description": "Timestamp" },
+              "isReady": { "type": "boolean" },
+              "multiplier": { "type": "number" },
+              "isFertilized": { "type": "boolean" }
+            }
+          }
+        },
+        "kangals": { "type": "number", "description": "Number of active Kangals" },
+        "weather": { "type": "string", "enum": ["SUNNY", "RAINY", "STORMY"] },
+        "hasLightningRod": { "type": "boolean" },
+        "xp": { "type": "number" },
+        "level": { "type": "number" },
+        "stats": {
+          "type": "object",
+          "properties": {
+            "totalHarvests": { "type": "number" },
+            "totalCoinsEarned": { "type": "number" }
+          }
+        },
+        "claimedQuests": { "type": "array", "items": { "type": "number" } },
+        "lastDailyReward": { "type": ["string", "null"] }
+      },
+      "required": ["uid", "plots", "kangals", "weather", "hasLightningRod", "xp", "level", "stats", "claimedQuests"]
+    },
+    "LeaderboardEntry": {
+      "title": "Leaderboard Entry",
+      "description": "Entry for the global ranking",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "score": { "type": "number" },
+        "level": { "type": "number" },
+        "photoURL": { "type": "string" }
+      },
+      "required": ["uid", "displayName", "score", "level"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User profile data"
+    },
+    "/gardens/{userId}": {
+      "schema": "Garden",
+      "description": "User's garden state"
+    },
+    "/leaderboard/{userId}": {
+      "schema": "LeaderboardEntry",
+      "description": "Global leaderboard entries"
+    }
+  }
+}
